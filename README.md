@@ -53,3 +53,8 @@ To : 64 bit 80x86 assembly langage (AT&T)
 // Digit := "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"
 // Letter := "a"|...|"z"
 
+// Statement := AssignementStatement | IfStatement | WhileStatement | ForStatement | BlockStatement
+// IfStatement := "IF" Expression "THEN" Statement [ "ELSE" Statement ]
+// WhileStatement := "WHILE" Expression DO Statement
+// ForStatement := "FOR" AssignementStatement "To" Expression "DO" Statement
+// BlockStatement := "BEGIN" Statement { ";" Statement } "END"
