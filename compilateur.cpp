@@ -25,12 +25,31 @@
 using namespace std;
 
 char current;				// Current car	
+unsigned long TagNumber=0;
+int cmpNextChar = 0;
+enum OPREL {equ, diff, infe, supe, inf, sup, unknown};
+char NextCar;       		// Next car
 
-void ReadChar(void){		// Read character and skip spaces until 
-				// non space character is read
-	while(cin.get(current) && (current==' '||current=='\t'||current=='\n'))
-	   	cin.get(current);
+
+
+void ReadChar(void){
+	if (cmpNextChar > 0){
+			current = NextCar;
+			cmpNextChar -- ;
+	}
+	else{
+																								// Read character and skip spaces until 
+		while(cin.get(current) && (current==' '||current=='\t'||current=='\n'));				// non space character is read
+	}
 }
+
+void NextChar(void){
+	while(cin.get(NextCar) && (NextCar==' '||NextCar=='\t'||NextCar=='\n')){
+		cmpNextChar++;
+	}
+}
+
+
 
 void Error(string s){
 	cerr<< s << endl;
@@ -60,6 +79,82 @@ void Digit(void){
 }
 
 void ArithmeticExpression(void);			// Called by Term() and calls Term()
+
+OPREL RelationalOperator(void){
+	if(current != '=' && current != '!' && current != '<' && current != '>'){
+		return unknown;
+	}
+	NextChar();
+	if (NextCar == '='){
+			switch(current){
+					case '=' : 
+						ReadChar(); ReadChar(); 
+						return equ;
+					case '!': 
+						ReadChar(); ReadChar(); 
+						return diff;
+					case '<': 
+						ReadChar(); ReadChar(); 
+						return infe;
+					case '>': 
+						ReadChar(); ReadChar(); 
+						return supe;
+			}
+	}	
+	
+	switch(current){
+			case '=' : 
+				Error("utilisez '==' comme opérateur d'égalité");
+			case '<' : 
+				ReadChar(); ReadChar(); 
+				return inf;
+			case '>' : 
+				ReadChar(); ReadChar(); 
+				return sup;
+			default:	Error("opérateur relationnel inconnu");
+	}
+	return unknown;	
+}
+
+void Expression (void){
+	OPREL opcomp;
+	ArithmeticExpression();
+	if (current == '=' || current == '!' ||current == '<' || current == '>'){
+		opcomp = RelationalOperator();
+		ArithmeticExpression();
+		cout << "\tpop %rbx"<< " #resultat de l'expression 2" << endl;  	// get the result of the first Arethmetic Expression
+		cout << "\tpop %rax"<< " #resultat de l'expression 1" << endl;		// get the result of the first Arethmetic Expression
+		cout <<"\t cmpq %rax,%rbx" << endl;       // compare the resulsts
+		switch(opcomp){
+			case equ:
+				cout << "\tje Vrai"<<++TagNumber<<"\t# If equal"<<endl;
+				break;
+			case diff:
+				cout << "\tjne Vrai"<<++TagNumber<<"\t# If different"<<endl;
+				break;
+			case supe:
+				cout << "\tjae Vrai"<<++TagNumber<<"\t# If above or equal"<<endl;
+				break;
+			case infe:
+				cout << "\tjbe Vrai"<<++TagNumber<<"\t# If below or equal"<<endl;
+				break;
+			case inf:
+				cout << "\tjb Vrai"<<++TagNumber<<"\t# If below"<<endl;
+				break;
+			case sup:
+				cout << "\tja Vrai"<<++TagNumber<<"\t# If above"<<endl;
+				break;
+			default:
+				Error("Opérateur de comparaison inconnu");
+
+		}
+		cout << "\tpush $0\t\t# False"<<endl;
+		cout << "\tjmp Suite"<<TagNumber<<endl;
+		cout << "Vrai"<<TagNumber<<":\tpush $0xFFFFFFFFFFFFFFFF\t\t# True"<<endl;	
+		cout << "Suite"<<TagNumber<<":"<<endl;
+	}
+}
+
 
 void Term(void){
 	if(current=='('){
@@ -95,7 +190,7 @@ void ArithmeticExpression(void){
 
 }
 
-int main(void){	// First version : Source code on standard input and assembly code on standard output
+i/*nt main(void){	// First version : Source code on standard input and assembly code on standard output
 	// Header for gcc assembler / linker
 	cout << "\t\t\t# This code was produced by the CERI Compiler"<<endl;
 	cout << "\t.text\t\t# The following lines contain the program"<<endl;
@@ -115,9 +210,35 @@ int main(void){	// First version : Source code on standard input and assembly co
 		Error("."); // unexpected characters at the end of program
 	}
 
-}
+}*/
 		
-			
+int main(void){	// First version : Source code on standard input and assembly code on standard output
+	// Header for gcc assembler / linker
+	cout << "\t\t\t# This code was produced by the CERI Compiler"<<endl;
+	cout << "\t.text\t\t# The following lines contain the program"<<endl;
+	cout << "\t.globl main\t# The main function must be visible from outside"<<endl;
+	cout << "main:\t\t\t# The main function body :"<<endl;
+	cout << "\tmovq %rsp, %rbp\t# Save the position of the stack's top"<<endl;
+
+	// Let's proceed to the analysis and code production
+	//ReadChar();
+	//ArithmeticExpression();
+	//ReadChar();
+	
+	ReadChar();
+	Expression();
+	ReadChar();
+	
+	// Trailer for the gcc assembler / linker
+	cout << "\tmovq %rbp, %rsp\t\t# Restore the position of the stack's top"<<endl;
+	cout << "\tret\t\t\t# Return from main function"<<endl;
+	if(cin.get(current)){
+		cerr <<"Caractères en trop à la fin du programme : ["<<current<<"]";
+		Error("."); // unexpected characters at the end of program
+	}
+
+}
+
 
 
 
