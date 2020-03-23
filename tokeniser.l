@@ -19,13 +19,12 @@ using namespace std;
 %option c++
 %option yylineno
 
-keyword (IF|THEN|ELSE|WHILE|DO|FOR|END|TO|BEGIN)
-
 stringconst  \"[^\n"]+\"
 ws      [ \t\n\r]+
 alpha   [A-Za-z]
 digit   [0-9]
 number  {digit}+
+MOTCLEF (DISPLAY|IF|THEN|ELSE|BEGIN|END|FOR|TO|DOWNTO|WHILE|DO|VAR|INTEGER|BOOLEAN)
 id  {alpha}({alpha}|{digit})*
 addop (\+|\-|\|\|)
 mulop (\*|\/|%|\&\&)
@@ -34,12 +33,11 @@ unknown [^\"A-Za-z0-9 \n\r\t\(\)\<\>\=\!\%\&\|\}\-\;\.]+
 
 %%
 
-{keyword} return KEYWORD;
-
 {addop}   return ADDOP;
 {mulop}   return MULOP;
 {relop}   return RELOP;
 {number}  return NUMBER;
+{MOTCLEF} return MOTCLEF;
 {id}    return ID;
 {stringconst} return STRINGCONST;
 "["   return RBRACKET;
@@ -47,6 +45,7 @@ unknown [^\"A-Za-z0-9 \n\r\t\(\)\<\>\=\!\%\&\|\}\-\;\.]+
 ","   return COMMA;
 ";"   return SEMICOLON;
 "."   return DOT;
+":"   return COLON;
 ":="    return ASSIGN;
 "("   return RPARENT;
 ")"   return LPARENT;
