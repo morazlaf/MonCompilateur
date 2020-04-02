@@ -19,7 +19,7 @@ using namespace std;
 %option c++
 %option yylineno
 
-
+charconst \'\\?.\'
 ws      [ \t\n\r]+
 alpha   [A-Za-z]
 digit   [0-9]
@@ -28,7 +28,6 @@ motclef (DISPLAY|IF|THEN|ELSE|BEGIN|END|FOR|TO|DOWNTO|WHILE|DO|VAR|INTEGER|BOOLE
 id  {alpha}({alpha}|{digit})*
 addop (\+|\-|\|\|)
 mulop (\*|\/|%|\&\&)
-charconst \'\\?.\'
 relop (\<|\>|"=="|\<=|\>=|!=)
 unknown [^\"A-Za-z0-9 \n\r\t\(\)\<\>\=\!\%\&\|\}\-\;\.]+
 
@@ -38,8 +37,8 @@ unknown [^\"A-Za-z0-9 \n\r\t\(\)\<\>\=\!\%\&\|\}\-\;\.]+
 {mulop}   return MULOP;
 {relop}   return RELOP;
 {number}  return NUMBER;
-{id}    return ID;
 {motclef} return MOTCLEF;
+{id}    return ID;
 {charconst} return CHARCONST;
 "["   return RBRACKET;
 "]"   return LBRACKET;
@@ -68,4 +67,3 @@ unknown [^\"A-Za-z0-9 \n\r\t\(\)\<\>\=\!\%\&\|\}\-\;\.]+
 {unknown} return UNKNOWN;
 
 %%
-

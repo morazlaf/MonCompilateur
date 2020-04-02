@@ -1,0 +1,198 @@
+==1172== Memcheck, a memory error detector
+==1172== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==1172== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==1172== Command: ./compilateur
+==1172==
+==1172== error calling PR_SET_PTRACER, vgdb might block
+==1172== Invalid read of size 4
+==1172==    at 0x10E208: ForStatement() (compilateur.cpp:667)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10EACE: StatementPart() (compilateur.cpp:731)
+==1172==    by 0x10EEB0: Program() (compilateur.cpp:765)
+==1172==    by 0x10F083: main (compilateur.cpp:782)
+==1172==  Address 0x5c6863c is 4 bytes before a block of size 60,000 alloc'd
+==1172==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1172==    by 0x10F2D5: __static_initialization_and_destruction_0(int, int) (compilateur.cpp:86)
+==1172==    by 0x10F317: _GLOBAL__sub_I_cur (compilateur.cpp:791)
+==1172==    by 0x114D6C: __libc_csu_init (in /mnt/c/Users/mohamed/Desktop/S4/assembleur/raz/compilateur)
+==1172==    by 0x53FEB27: (below main) (libc-start.c:266)
+==1172==
+==1172== Invalid read of size 8
+==1172==    at 0x4F635B0: std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<cha
+r>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::cha
+r_traits<char>, std::allocator<char> > const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+==1172==    by 0x10E2BF: ForStatement() (compilateur.cpp:671)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10EACE: StatementPart() (compilateur.cpp:731)
+==1172==    by 0x10EEB0: Program() (compilateur.cpp:765)
+==1172==    by 0x10F083: main (compilateur.cpp:782)
+==1172==  Address 0x5bf32e0 is 16 bytes before a block of size 480,008 alloc'd
+==1172==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1172==    by 0x10F292: __static_initialization_and_destruction_0(int, int) (compilateur.cpp:85)
+==1172==    by 0x10F317: _GLOBAL__sub_I_cur (compilateur.cpp:791)
+==1172==    by 0x114D6C: __libc_csu_init (in /mnt/c/Users/mohamed/Desktop/S4/assembleur/raz/compilateur)
+==1172==    by 0x53FEB27: (below main) (libc-start.c:266)
+==1172==
+==1172== Invalid read of size 8
+==1172==    at 0x4F635B4: std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<cha
+r>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::cha
+r_traits<char>, std::allocator<char> > const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+==1172==    by 0x10E2BF: ForStatement() (compilateur.cpp:671)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10EACE: StatementPart() (compilateur.cpp:731)
+==1172==    by 0x10EEB0: Program() (compilateur.cpp:765)
+==1172==    by 0x10F083: main (compilateur.cpp:782)
+==1172==  Address 0x5bf32d8 is 24 bytes before a block of size 480,008 alloc'd
+==1172==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1172==    by 0x10F292: __static_initialization_and_destruction_0(int, int) (compilateur.cpp:85)
+==1172==    by 0x10F317: _GLOBAL__sub_I_cur (compilateur.cpp:791)
+==1172==    by 0x114D6C: __libc_csu_init (in /mnt/c/Users/mohamed/Desktop/S4/assembleur/raz/compilateur)
+==1172==    by 0x53FEB27: (below main) (libc-start.c:266)
+==1172==
+==1172== Invalid read of size 8
+==1172==    at 0x4F635B0: std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<cha
+r>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::cha
+r_traits<char>, std::allocator<char> > const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+==1172==    by 0x10E531: ForStatement() (compilateur.cpp:687)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10EACE: StatementPart() (compilateur.cpp:731)
+==1172==    by 0x10EEB0: Program() (compilateur.cpp:765)
+==1172==    by 0x10F083: main (compilateur.cpp:782)
+==1172==  Address 0x5bf32e0 is 16 bytes before a block of size 480,008 alloc'd
+==1172==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1172==    by 0x10F292: __static_initialization_and_destruction_0(int, int) (compilateur.cpp:85)
+==1172==    by 0x10F317: _GLOBAL__sub_I_cur (compilateur.cpp:791)
+==1172==    by 0x114D6C: __libc_csu_init (in /mnt/c/Users/mohamed/Desktop/S4/assembleur/raz/compilateur)
+==1172==    by 0x53FEB27: (below main) (libc-start.c:266)
+==1172==
+==1172== Invalid read of size 8
+==1172==    at 0x4F635B4: std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<cha
+r>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::cha
+r_traits<char>, std::allocator<char> > const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+==1172==    by 0x10E531: ForStatement() (compilateur.cpp:687)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10EACE: StatementPart() (compilateur.cpp:731)
+==1172==    by 0x10EEB0: Program() (compilateur.cpp:765)
+==1172==    by 0x10F083: main (compilateur.cpp:782)
+==1172==  Address 0x5bf32d8 is 24 bytes before a block of size 480,008 alloc'd
+==1172==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1172==    by 0x10F292: __static_initialization_and_destruction_0(int, int) (compilateur.cpp:85)
+==1172==    by 0x10F317: _GLOBAL__sub_I_cur (compilateur.cpp:791)
+==1172==    by 0x114D6C: __libc_csu_init (in /mnt/c/Users/mohamed/Desktop/S4/assembleur/raz/compilateur)
+==1172==    by 0x53FEB27: (below main) (libc-start.c:266)
+==1172==
+==1172== Invalid read of size 4
+==1172==    at 0x10E208: ForStatement() (compilateur.cpp:667)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10E84E: BlockStatement() (compilateur.cpp:710)
+==1172==    by 0x10D841: Statement() (compilateur.cpp:599)
+==1172==    by 0x10E56E: ForStatement() (compilateur.cpp:690)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10EACE: StatementPart() (compilateur.cpp:731)
+==1172==    by 0x10EEB0: Program() (compilateur.cpp:765)
+==1172==    by 0x10F083: main (compilateur.cpp:782)
+==1172==  Address 0x5c6863c is 4 bytes before a block of size 60,000 alloc'd
+==1172==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1172==    by 0x10F2D5: __static_initialization_and_destruction_0(int, int) (compilateur.cpp:86)
+==1172==    by 0x10F317: _GLOBAL__sub_I_cur (compilateur.cpp:791)
+==1172==    by 0x114D6C: __libc_csu_init (in /mnt/c/Users/mohamed/Desktop/S4/assembleur/raz/compilateur)
+==1172==    by 0x53FEB27: (below main) (libc-start.c:266)
+==1172==
+==1172== Invalid read of size 8
+==1172==    at 0x4F635B0: std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<cha
+r>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::cha
+r_traits<char>, std::allocator<char> > const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+==1172==    by 0x10E2BF: ForStatement() (compilateur.cpp:671)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10E84E: BlockStatement() (compilateur.cpp:710)
+==1172==    by 0x10D841: Statement() (compilateur.cpp:599)
+==1172==    by 0x10E56E: ForStatement() (compilateur.cpp:690)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10EACE: StatementPart() (compilateur.cpp:731)
+==1172==    by 0x10EEB0: Program() (compilateur.cpp:765)
+==1172==    by 0x10F083: main (compilateur.cpp:782)
+==1172==  Address 0x5bf32e0 is 16 bytes before a block of size 480,008 alloc'd
+==1172==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1172==    by 0x10F292: __static_initialization_and_destruction_0(int, int) (compilateur.cpp:85)
+==1172==    by 0x10F317: _GLOBAL__sub_I_cur (compilateur.cpp:791)
+==1172==    by 0x114D6C: __libc_csu_init (in /mnt/c/Users/mohamed/Desktop/S4/assembleur/raz/compilateur)
+==1172==    by 0x53FEB27: (below main) (libc-start.c:266)
+==1172==
+==1172== Invalid read of size 8
+==1172==    at 0x4F635B4: std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<cha
+r>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::cha
+r_traits<char>, std::allocator<char> > const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+==1172==    by 0x10E2BF: ForStatement() (compilateur.cpp:671)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10E84E: BlockStatement() (compilateur.cpp:710)
+==1172==    by 0x10D841: Statement() (compilateur.cpp:599)
+==1172==    by 0x10E56E: ForStatement() (compilateur.cpp:690)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10EACE: StatementPart() (compilateur.cpp:731)
+==1172==    by 0x10EEB0: Program() (compilateur.cpp:765)
+==1172==    by 0x10F083: main (compilateur.cpp:782)
+==1172==  Address 0x5bf32d8 is 24 bytes before a block of size 480,008 alloc'd
+==1172==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1172==    by 0x10F292: __static_initialization_and_destruction_0(int, int) (compilateur.cpp:85)
+==1172==    by 0x10F317: _GLOBAL__sub_I_cur (compilateur.cpp:791)
+==1172==    by 0x114D6C: __libc_csu_init (in /mnt/c/Users/mohamed/Desktop/S4/assembleur/raz/compilateur)
+==1172==    by 0x53FEB27: (below main) (libc-start.c:266)
+==1172==
+==1172== Invalid read of size 8
+==1172==    at 0x4F635B0: std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<cha
+r>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::cha
+r_traits<char>, std::allocator<char> > const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+==1172==    by 0x10E531: ForStatement() (compilateur.cpp:687)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10E84E: BlockStatement() (compilateur.cpp:710)
+==1172==    by 0x10D841: Statement() (compilateur.cpp:599)
+==1172==    by 0x10E56E: ForStatement() (compilateur.cpp:690)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10EACE: StatementPart() (compilateur.cpp:731)
+==1172==    by 0x10EEB0: Program() (compilateur.cpp:765)
+==1172==    by 0x10F083: main (compilateur.cpp:782)
+==1172==  Address 0x5bf32e0 is 16 bytes before a block of size 480,008 alloc'd
+==1172==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1172==    by 0x10F292: __static_initialization_and_destruction_0(int, int) (compilateur.cpp:85)
+==1172==    by 0x10F317: _GLOBAL__sub_I_cur (compilateur.cpp:791)
+==1172==    by 0x114D6C: __libc_csu_init (in /mnt/c/Users/mohamed/Desktop/S4/assembleur/raz/compilateur)
+==1172==    by 0x53FEB27: (below main) (libc-start.c:266)
+==1172==
+==1172== Invalid read of size 8
+==1172==    at 0x4F635B4: std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<cha
+r>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::cha
+r_traits<char>, std::allocator<char> > const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+==1172==    by 0x10E531: ForStatement() (compilateur.cpp:687)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10E84E: BlockStatement() (compilateur.cpp:710)
+==1172==    by 0x10D841: Statement() (compilateur.cpp:599)
+==1172==    by 0x10E56E: ForStatement() (compilateur.cpp:690)
+==1172==    by 0x10D810: Statement() (compilateur.cpp:598)
+==1172==    by 0x10EACE: StatementPart() (compilateur.cpp:731)
+==1172==    by 0x10EEB0: Program() (compilateur.cpp:765)
+==1172==    by 0x10F083: main (compilateur.cpp:782)
+==1172==  Address 0x5bf32d8 is 24 bytes before a block of size 480,008 alloc'd
+==1172==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1172==    by 0x10F292: __static_initialization_and_destruction_0(int, int) (compilateur.cpp:85)
+==1172==    by 0x10F317: _GLOBAL__sub_I_cur (compilateur.cpp:791)
+==1172==    by 0x114D6C: __libc_csu_init (in /mnt/c/Users/mohamed/Desktop/S4/assembleur/raz/compilateur)
+==1172==    by 0x53FEB27: (below main) (libc-start.c:266)
+==1172==
+Ligne n°25, lu : 'END'(2), mais mot inconnu
+==1172==
+==1172== HEAP SUMMARY:
+==1172==     in use at exit: 1,037,210 bytes in 7 blocks
+==1172==   total heap usage: 26 allocs, 19 frees, 1,119,194 bytes allocated
+==1172==
+==1172== LEAK SUMMARY:
+==1172==    definitely lost: 0 bytes in 0 blocks
+==1172==    indirectly lost: 0 bytes in 0 blocks
+==1172==      possibly lost: 0 bytes in 0 blocks
+==1172==    still reachable: 1,037,210 bytes in 7 blocks
+==1172==                       of which reachable via heuristic:
+==1172==                         newarray           : 960,016 bytes in 2 blocks
+==1172==         suppressed: 0 bytes in 0 blocks
+==1172== Rerun with --leak-check=full to see details of leaked memory
+==1172==
+==1172== For counts of detected and suppressed errors, rerun with: -v
+==1172== ERROR SUMMARY: 10 errors from 10 contexts (suppressed: 0 from 0)

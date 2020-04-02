@@ -13,9 +13,8 @@ BEGIN
 	ELSE
 		DISPLAY a*2;
 	a:=a+1;
-	c:=(a<=b);
-	DISPLAY c
-END
+	DISPLAY a;
+END;
 
 
 
@@ -25,4 +24,4 @@ BEGIN
 	DISPLAY cht;
 	DISPLAY tdbl;
 	DISPLAY '\n';
-END
+END.

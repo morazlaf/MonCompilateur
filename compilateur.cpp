@@ -66,12 +66,12 @@ void Error(string s){
 // Expression := SimpleExpression [RelationalOperator SimpleExpression]
 // SimpleExpression := Term {AdditiveOperator Term}
 // Term := Factor {MultiplicativeOperator Factor}
-// Factor := Number | Letter | "(" Expression ")"| "!" Factor
+// Factor := Number | Letter | "(" Expression ")"| "!" Factor
 // Number := Digit{Digit}
 
-// AdditiveOperator := "+" | "-" | "||"
-// MultiplicativeOperator := "*" | "/" | "%" | "&&"
-// RelationalOperator := "==" | "!=" | "<" | ">" | "<=" | ">="  
+// AdditiveOperator := "+" | "-" | "||"
+// MultiplicativeOperator := "*" | "/" | "%" | "&&"
+// RelationalOperator := "==" | "!=" | "<" | ">" | "<=" | ">="  
 // Digit := "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"
 // Letter := "a"|...|"z"
 	
@@ -80,18 +80,15 @@ void Error(string s){
 // WhileStatement := "WHILE" Expression DO Statement
 // ForStatement := "FOR" AssignementStatement "To" Expression "DO" Statement
 // BlockStatement := "BEGIN" Statement { ";" Statement } "END"
-		
+string *fon = new string[15000];
+int ind=0;
 
 enum TYPES Expression(void);			// Called by Term() and calls Term()
 void Statement(void);
 void StatementPart(void);
 
 enum TYPES Identifier(void){
-	enum TYPES type;
-	if(!IsDeclared(lexer->YYText())){
-		cerr << "Erreur : Variable '"<<lexer->YYText()<<"' non déclarée"<<endl;
-		exit(-1);
-	}
+	TYPES type;
 	type=DeclaredVariables[lexer->YYText()];
 	cout << "\tpush "<<lexer->YYText()<<endl;
 	cur=(TOKEN) lexer->yylex();
@@ -129,6 +126,8 @@ enum TYPES CharConst(void){
 	return CHAR;
 }
 
+
+
 // PLUS RIEN QUI MARCHE JE VAIS VRILLER
 enum TYPES Factor(void){
 	enum TYPES type;
@@ -159,7 +158,77 @@ enum TYPES Factor(void){
 
 
 
-// MultiplicativeOperator := "*" | "/" | "%" | "&&"
+enum TYPES Type(void){
+	if(cur!=MOTCLEF)
+		Error("type expected");
+	if(strcmp(lexer->YYText(),"BOOLEAN")==0){
+		cur=(TOKEN) lexer->yylex();
+		return BOOLEAN;
+	}	
+	else if(strcmp(lexer->YYText(),"INTEGER")==0){
+		cur=(TOKEN) lexer->yylex();
+		return INTEGER;
+	}
+	else if(strcmp(lexer->YYText(),"CHAR")==0){
+		cur=(TOKEN) lexer->yylex();
+		return CHAR;
+	}
+	else if(strcmp(lexer->YYText(),"DOUBLE")==0){
+		cur=(TOKEN) lexer->yylex();
+		return DOUBLE;
+	}else
+		Error("unknown type");
+
+}
+
+// Declaration := Ident {"," Ident} ":" Type
+void VarDeclaration(void){
+	set<string> idents;
+	enum TYPES vdtype;
+	if(cur!=ID)
+		Error("Un identificater était attendu");
+	idents.insert(lexer->YYText());
+	cur=(TOKEN) lexer->yylex();
+	while(cur==COMMA){
+		cur=(TOKEN) lexer->yylex();
+		if(cur!=ID)
+			Error("Un identificateur était attendu");
+		idents.insert(lexer->YYText());
+		cur=(TOKEN) lexer->yylex();
+	}
+	if(cur!=COLON)
+		Error("caractère ':' attendu");
+	cur=(TOKEN) lexer->yylex();
+	vdtype=Type();
+	for (set<string>::iterator it=idents.begin(); it!=idents.end(); ++it){
+	    if(vdtype==INTEGER)
+	    	cout << *it << ":\t.quad 0"<<endl;
+		else if(vdtype==DOUBLE)
+			cout << *it << ":\t.double 0.0"<<endl;
+		else if(vdtype==CHAR)
+			cout << *it << ":\t.byte 0"<<endl;
+		else
+			Error("type inconnu");
+        DeclaredVariables[*it]=vdtype;
+	}
+}
+
+// DeclarationPart := "[" Ident {"," Ident} "]"
+// DEVIENS
+// VarDeclarationPart := "VAR" VarDeclaration {";" VarDeclaration} "."
+void VarDeclarationPart(void){
+	cur=(TOKEN) lexer->yylex();
+	VarDeclaration();
+	while(cur==SEMICOLON){
+		cur=(TOKEN) lexer->yylex();
+		VarDeclaration();
+	}
+	if(cur!=DOT)
+		Error("'.' point attendu");
+	cur=(TOKEN) lexer->yylex();
+}
+
+// MultiplicativeOperator := "*" | "/" | "%" | "&&"
 OPMUL MultiplicativeOperator(void){
 	OPMUL opmul;
 	if(strcmp(lexer->YYText(),"*")==0)
@@ -207,7 +276,7 @@ enum TYPES Term(void){
 				else{
 					cout<<"\tfldl	8(%rsp)\t"<<endl;
 					cout<<"\tfldl	(%rsp)\t# first operand -> %st(0) ; second operand -> %st(1)"<<endl;
-					cout<<"\tfmulp	%st(0),%st(1)\t# %st(0) <- op1 + op2 ; %st(1)=null"<<endl;
+					cout<<"\tfmulp	%st(0),%st(1)\t# %st(0) <- op1 + op2 ; %st(1)=null"<<endl;
 					cout<<"\tfstpl 8(%rsp)"<<endl;
 					cout<<"\taddq	$8, %rsp\t# result on stack's top"<<endl; 
 				}
@@ -238,7 +307,7 @@ enum TYPES Term(void){
 
 
 
-// AdditiveOperator := "+" | "-" | "||"
+// AdditiveOperator := "+" | "-" | "||"
 OPADD AdditiveOperator(void){
 	OPADD opadd;
 	if(strcmp(lexer->YYText(),"+")==0)
@@ -312,80 +381,7 @@ TYPES SimpleExpression(void){
 }
 
 
-
-enum TYPES Type(void){
-	if(cur!=MOTCLEF)
-		Error("type expected");
-	if(strcmp(lexer->YYText(),"BOOLEAN")==0){
-		cur=(TOKEN) lexer->yylex();
-		return BOOLEAN;
-	}	
-	else if(strcmp(lexer->YYText(),"INTEGER")==0){
-		cur=(TOKEN) lexer->yylex();
-		return INTEGER;
-	}
-	else if(strcmp(lexer->YYText(),"CHAR")==0){
-		cur=(TOKEN) lexer->yylex();
-		return CHAR;
-	}
-	else if(strcmp(lexer->YYText(),"DOUBLE")==0){
-		cur=(TOKEN) lexer->yylex();
-		return DOUBLE;
-	}else
-		Error("unknown type");
-
-}
-
-
-
-// Declaration := Ident {"," Ident} ":" Type
-void VarDeclaration(void){
-	set<string> idents;
-	enum TYPES vdtype;
-	if(cur!=ID)
-		Error("Un identificater était attendu");
-	idents.insert(lexer->YYText());
-	cur=(TOKEN) lexer->yylex();
-	while(cur==COMMA){
-		cur=(TOKEN) lexer->yylex();
-		if(cur!=ID)
-			Error("Un identificateur était attendu");
-		idents.insert(lexer->YYText());
-		cur=(TOKEN) lexer->yylex();
-	}
-	if(cur!=COLON)
-		Error("caractère ':' attendu");
-	cur=(TOKEN) lexer->yylex();
-	vdtype=Type();
-	for (set<string>::iterator it=idents.begin(); it!=idents.end(); ++it){
-	    if(vdtype==INTEGER)
-	    	cout << *it << ":\t.quad 0"<<endl;
-		else if(vdtype==DOUBLE)
-			cout << *it << ":\t.double 0.0"<<endl;
-		else if(vdtype==CHAR)
-			cout << *it << ":\t.byte 0"<<endl;
-		else
-			Error("type inconnu");
-        DeclaredVariables[*it]=vdtype;
-	}
-}
-
-// DeclarationPart := "[" Ident {"," Ident} "]"
-// DEVIENS
-// VarDeclarationPart := "VAR" VarDeclaration {";" VarDeclaration} "."
-void VarDeclarationPart(void){
-	cur=(TOKEN) lexer->yylex();
-	VarDeclaration();
-	while(cur==SEMICOLON){
-		cur=(TOKEN) lexer->yylex();
-		VarDeclaration();
-	}
-	if(cur!=DOT)
-		Error("'.' point attendu");
-	cur=(TOKEN) lexer->yylex();
-}
-
-// RelationalOperator := "==" | "!=" | "<" | ">" | "<=" | ">="  
+// RelationalOperator := "==" | "!=" | "<" | ">" | "<=" | ">="  
 OPREL RelationalOperator(void){
 	OPREL oprel;
 	if(strcmp(lexer->YYText(),"==")==0)
@@ -450,185 +446,56 @@ enum TYPES Expression(void){
 	}
 	return type1;
 }
+void Statement(void);
+
 
 string *var = new string[15000];
 TYPES *typ = new TYPES[15000];
 int cptt = 0; 
 
-
 void AssignementStatement(void){
-	enum TYPES type1, type2;
+	TYPES ftype, stype;
 	string variable;
 	if(cur!=ID)
-		Error("Identificateur attendu");
+		Error("Identificateur expected");
 	if(!IsDeclared(lexer->YYText())){
 		cerr << "Erreur : Variable '"<<lexer->YYText()<<"' non déclarée"<<endl;
 		exit(-1);
 	}
 	variable=lexer->YYText();
-	type1=DeclaredVariables[variable];
+	ftype = DeclaredVariables[variable];
 	cur=(TOKEN) lexer->yylex();
 	if(cur!=ASSIGN)
-		Error("caractères ':=' attendus");
+		Error("caractères ':=' expecteds");
 	cur=(TOKEN) lexer->yylex();
-	type2=Expression();
-	if(type2!=type1){
-		cerr<<"Type variable "<<type1<<endl;
-		cerr<<"Type Expression "<<type2<<endl;
-		Error("types incompatibles dans l'affectation");
-	}
-	if(type1==CHAR){
+	stype = Expression();
+	if(ftype!=stype) Error("Les operandes ne sont pas du meme type");
+	if(ftype==CHAR){
 		cout << "\tpop %rax"<<endl;
-		cout << "\tmovb %al,"<<variable<<endl;
+		cout << "\tmovb %al,"<<variable<<endl; 
 	}
 	else
 		cout << "\tpop "<<variable<<endl;
+	var[cptt]=variable;
+	typ[cptt]=ftype;
+	cptt++;
 
 }
 
-
-
-
-// DisplayStatement := "DISPLAY" Expression
-void DisplayStatement(void){
-	enum TYPES type;
-	unsigned long long tag=++TagNumber;
-	cur=(TOKEN) lexer->yylex();
-	type=Expression();
-	if(type==INTEGER){
-		cout << "\tpop %rdx\t# valeur à afficher"<<endl;
-		cout << "\tmovq $FormatString1, %rsi\t# \"%llu\\n\""<<endl;
-	}
-	else
-		if(type==BOOLEAN){
-			cout << "\tpop %rdx\t# zero : False, !zero : true"<<endl;
-			cout << "\tcmpq $0, %rdx"<<endl;
-			cout << "\tje False"<<tag<<endl;
-			cout << "\tmovq $TrueString, %rsi\t# \"TRUE\\n\""<<endl;
-			cout << "\tjmp Next"<<tag<<endl;
-			cout << "False"<<tag<<":"<<endl;
-			cout << "\tmovq $FalseString, %rsi\t# \"FALSE\\n\""<<endl;
-			cout << "Next"<<tag<<":"<<endl;
-		}
-		else if(type==DOUBLE){
-			cout << "\tmovsd	(%rsp), %xmm0\t\t# &stack top -> %xmm0"<<endl;
-			cout << "\tsubq	$16, %rsp\t\t# allocation for 3 additional doubles"<<endl;
-			cout << "\tmovsd %xmm0, 8(%rsp)"<<endl;
-			cout << "\tmovq $FormatString2, %rdi\t# \"%lf\\n\""<<endl;
-			cout << "\tmovq	$1, %rax"<<endl;
-			cout << "\tcall	printf"<<endl;
-			cout << "nop"<<endl;
-			cout << "\taddq $24, %rsp\t\t\t# pop nothing"<<endl;
-		}
-		else if(type==CHAR){
-			cout<<"\tpop %rsi\t\t\t# get character in the 8 lowest bits of %si"<<endl;
-			cout << "\tmovq $FormatString3, %rdi\t# \"%c\\n\""<<endl;
-			cout << "\tmovl	$0, %eax"<<endl;
-			cout << "\tcall	printf@PLT"<<endl;
-		}
-		else
-			Error("DISPLAY ne fonctionne que pour les nombres entiers");
-	cout << "\tmovl	$1, %edi"<<endl;
-	cout << "\tmovl	$0, %eax"<<endl;
-	cout << "\tcall	__printf_chk@PLT"<<endl;
-}
-
-void IfStatement(void);
-void BlockStatement(void);
-void WhileStatement(void);
-void ForStatement(void);
-
-
-//<case label list> ::= <constant> {, <constant> }
-TYPES CaseLabelList(){
-	TYPES t1,t2;
-	cur=(TOKEN) lexer->yylex();
-	t1=Expression();
-	cout << "\tpop %rbx" <<endl;
-	cout << "\tcmpq %rcx, %rbx" <<endl;
-	cout << "\tje CASEstate" << TagNumber<<endl;
-	while(cur==COMMA){
-		cur=(TOKEN) lexer->yylex();
-		t2=Expression();
-		cout << "\tpop %rbx" <<endl;
-		cout << "\tcmpq %rcx, %rbx" <<endl;
-		cout << "\tje Casestate" << TagNumber <<endl;
-		if(t2!=t1) Error("CaseLabelList-> erreur typage;");
-	}
-	cout << "\tjmp FinCASEstate"<<TagNumber<<"\t\t# PAS EGALES - on va au prochain CaseListElement"<<endl;
-	return t1;
-}
-//<case list element> ::= <case label list> : <statement>
-TYPES CaseListElement(){
-	enum TYPES type = CaseLabelList();
-	if(cur != COLON)
-		Error("Caractère ':' attendu");
-	cur = (TOKEN)lexer->yylex();
-	cout<< "Casestate" << TagNumber << " : " <<endl;
-	Statement();
-	cout<< "\tjmp FinCase" << TagNumber <<endl;
-	cout<< "FinCASEstate" << TagNumber << " : " <<endl;
-	return type;
-
-}
-
-// Statement := AssignementStatement
-void Statement(void){
-	if(cur==MOTCLEF)
-		{	if (strcmp(lexer -> YYText(),"IF")==0){IfStatement();}
-			else if (strcmp(lexer -> YYText(),"WHILE")==0){WhileStatement();}
-			else if (strcmp(lexer -> YYText(),"FOR")==0){ForStatement();}
-			else if (strcmp(lexer -> YYText(),"BEGIN")==0){BlockStatement();}
-			else if(strcmp(lexer->YYText(),"DISPLAY")==0){DisplayStatement();}
-			else Error("mot inconnu");
-		}
-	else
-	if(cur==ID)
-		AssignementStatement();
-	else
-		Error("instrction attendu");
-}
-
-// IfStatement
-void IfStatement(void){
-	unsigned long long tag=TagNumber++;
-	cur=(TOKEN) lexer->yylex();
-	if(Expression()!=BOOLEAN)
-		Error("le type de l'expression doit être BOOLEAN");
-	cout<<"\tpop %rax\t# Get the result of expression"<<endl;
-	cout<<"\tcmpq $0, %rax"<<endl;
-	cout<<"\tje Else"<<tag<<"\t# if FALSE, jump to Else"<<tag<<endl;
-	if(cur!=MOTCLEF||strcmp(lexer->YYText(),"THEN")!=0)
-		Error("mot-clé 'THEN' attendu");
-	cur=(TOKEN) lexer->yylex();
-	Statement();
-	cout<<"\tjmp Next"<<tag<<"\t# Do not execute the else statement"<<endl;
-	cout<<"Else"<<tag<<":"<<endl; // Might be the same effective adress than Next:
-	if(cur==MOTCLEF&&strcmp(lexer->YYText(),"ELSE")==0){
+// BlockStatement
+void BlockStatement(void){
+	if(!strcmp(lexer->YYText(),"BEGIN")){
 		cur=(TOKEN) lexer->yylex();
 		Statement();
+		while(cur==SEMICOLON){
+			cur=(TOKEN) lexer->yylex();
+			Statement();
+		}
+		if(cur!=MOTCLEF||strcmp(lexer->YYText(), "END")!=0)
+			Error("END expected");
+		cur=(TOKEN) lexer->yylex();
 	}
-	cout<<"Next"<<tag<<":"<<endl;
-
-}
-
-
-// WhileStatement
-void WhileStatement(void){
-	unsigned long long tag=TagNumber++;
-	cout<<"While"<<tag<<":"<<endl;
-	cur=(TOKEN) lexer->yylex();
-	if(Expression()!=BOOLEAN)
-		Error("expression booléene attendue");
-	cout<<"\tpop %rax\t# Get the result of expression"<<endl;
-	cout<<"\tcmpq $0, %rax"<<endl;
-	cout<<"\tje EndWhile"<<tag<<"\t# if FALSE, sortir de la boucle"<<tag<<endl;
-	if(cur!=MOTCLEF||strcmp(lexer->YYText(), "DO")!=0)
-		Error("mot-clé DO attendu");
-	cur=(TOKEN) lexer->yylex();
-	Statement();
-	cout<<"\tjmp While"<<tag<<endl;
-	cout<<"EndWhile"<<tag<<":"<<endl;
+	else Error("BEGIN expected");
 }
 
 
@@ -682,43 +549,125 @@ void ForStatement(void){
 	else Error("FOR attendu");
 }
 
-// BlockStatement
-void BlockStatement(void){
-	if(!strcmp(lexer->YYText(),"BEGIN")){
-		cur=(TOKEN) lexer->yylex();
-		Statement();
-		while(cur==SEMICOLON){
-			cur=(TOKEN) lexer->yylex();
-			Statement();
-		}
-		if(cur!=MOTCLEF||strcmp(lexer->YYText(), "END")!=0)
-			Error("END expected");
-		cur=(TOKEN) lexer->yylex();
-	}
-	else Error("BEGIN expected");
-}
-
-
-
-// StatementPart := Statement {";" Statement} "."
-void StatementPart(void){
-	cout << "\t.align 8"<<endl;	// Alignement on addresses that are a multiple of 8 (64 bits = 8 bytes)
-	cout << "\t.text\t\t# The following lines contain the program"<<endl;
-	cout << "\t.globl main\t# The main function must be visible from outside"<<endl;
-	cout << "main:\t\t\t# The main function body :"<<endl;
-	cout << "\tmovq %rsp, %rbp\t# Save the position of the stack's top"<<endl;
-	Statement();
-	while(cur==SEMICOLON){
-		cur=(TOKEN) lexer->yylex();
-		Statement();
-	}
-	if(cur!=DOT)
-		Error("caractère '.' attendu");
+// IfStatement
+void IfStatement(void){
+	unsigned long long tag=TagNumber++;
 	cur=(TOKEN) lexer->yylex();
+	if(Expression()!=BOOLEAN)
+		Error("le type de l'expression doit être BOOLEAN");
+	cout<<"\tpop %rax\t# Get the result of expression"<<endl;
+	cout<<"\tcmpq $0, %rax"<<endl;
+	cout<<"\tje Else"<<tag<<"\t# if FALSE, jump to Else"<<tag<<endl;
+	if(cur!=MOTCLEF||strcmp(lexer->YYText(),"THEN")!=0)
+		Error("mot-clé 'THEN' attendu");
+	cur=(TOKEN) lexer->yylex();
+	Statement();
+	cout<<"\tjmp Next"<<tag<<"\t# Do not execute the else statement"<<endl;
+	cout<<"Else"<<tag<<":"<<endl; // Might be the same effective adress than Next:
+	if(cur==MOTCLEF&&strcmp(lexer->YYText(),"ELSE")==0){
+		cur=(TOKEN) lexer->yylex();
+		Statement();
+	}
+	cout<<"Next"<<tag<<":"<<endl;
+
 }
 
-string *fon = new string[15000];
-int ind=0;
+
+// WhileStatement
+void WhileStatement(void){
+	unsigned long long tag=TagNumber++;
+	cout<<"While"<<tag<<":"<<endl;
+	cur=(TOKEN) lexer->yylex();
+	if(Expression()!=BOOLEAN)
+		Error("expression booléene attendue");
+	cout<<"\tpop %rax\t# Get the result of expression"<<endl;
+	cout<<"\tcmpq $0, %rax"<<endl;
+	cout<<"\tje EndWhile"<<tag<<"\t# if FALSE, sortir de la boucle"<<tag<<endl;
+	if(cur!=MOTCLEF||strcmp(lexer->YYText(), "DO")!=0)
+		Error("mot-clé DO attendu");
+	cur=(TOKEN) lexer->yylex();
+	Statement();
+	cout<<"\tjmp While"<<tag<<endl;
+	cout<<"EndWhile"<<tag<<":"<<endl;
+}
+
+// DisplayStatement := "DISPLAY" Expression
+void DisplayStatement(void){
+	enum TYPES type;
+	unsigned long long tag=++TagNumber;
+	cur=(TOKEN) lexer->yylex();
+	type=Expression();
+	if(type==INTEGER){
+		cout << "\tpop %rdx\t# valeur à afficher"<<endl;
+		cout << "\tmovq $FormatString1, %rsi\t# \"%llu\\n\""<<endl;
+	}
+	else if(type==BOOLEAN){
+			cout << "\tpop %rdx\t# zero : False, !zero : true"<<endl;
+			cout << "\tcmpq $0, %rdx"<<endl;
+			cout << "\tje False"<<tag<<endl;
+			cout << "\tmovq $TrueString, %rsi\t# \"TRUE\\n\""<<endl;
+			cout << "\tjmp Next"<<tag<<endl;
+			cout << "False"<<tag<<":"<<endl;
+			cout << "\tmovq $FalseString, %rsi\t# \"FALSE\\n\""<<endl;
+			cout << "Next"<<tag<<":"<<endl;
+		}
+	else if(type==DOUBLE){
+		cout << "\tmovsd	(%rsp), %xmm0\t\t# &stack top -> %xmm0"<<endl;
+		cout << "\tsubq	$16, %rsp\t\t# allocation for 3 additional doubles"<<endl;
+		cout << "\tmovsd %xmm0, 8(%rsp)"<<endl;
+		cout << "\tmovq $FormatString2, %rdi\t# \"%lf\\n\""<<endl;
+		cout << "\tmovq	$1, %rax"<<endl;
+		cout << "\tcall	printf"<<endl;
+		cout << "nop"<<endl;
+		cout << "\taddq $24, %rsp\t\t\t# pop nothing"<<endl;
+	}
+	else if(type==CHAR){
+		cout<<"\tpop %rsi\t\t\t# get character in the 8 lowest bits of %si"<<endl;
+		cout << "\tmovq $FormatString3, %rdi\t# \"%c\\n\""<<endl;
+		cout << "\tmovl	$0, %eax"<<endl;
+		cout << "\tcall	printf@PLT"<<endl;
+	}
+	else
+		Error("DISPLAY ne fonctionne que pour les nombres entiers");
+	cout << "\tmovl	$1, %edi"<<endl;
+	cout << "\tmovl	$0, %eax"<<endl;
+	cout << "\tcall	__printf_chk@PLT"<<endl;
+}
+
+
+//<case label list> ::= <constant> {, <constant> }
+TYPES CaseLabelList(){
+	TYPES t1,t2;
+	cur=(TOKEN) lexer->yylex();
+	t1=Expression();
+	cout << "\tpop %rbx" <<endl;
+	cout << "\tcmpq %rcx, %rbx" <<endl;
+	cout << "\tje CASEstate" << TagNumber<<endl;
+	while(cur==COMMA){
+		cur=(TOKEN) lexer->yylex();
+		t2=Expression();
+		cout << "\tpop %rbx" <<endl;
+		cout << "\tcmpq %rcx, %rbx" <<endl;
+		cout << "\tje Casestate" << TagNumber <<endl;
+		if(t2!=t1) Error("CaseLabelList-> erreur typage;");
+	}
+	cout << "\tjmp FinCASEstate"<<TagNumber<<"\t\t# PAS EGALES - on va au prochain CaseListElement"<<endl;
+	return t1;
+}
+//<case list element> ::= <case label list> : <statement>
+TYPES CaseListElement(){
+	enum TYPES type = CaseLabelList();
+	if(cur != COLON)
+		Error("Caractère ':' attendu");
+	cur = (TOKEN)lexer->yylex();
+	cout<< "Casestate" << TagNumber << " : " <<endl;
+	Statement();
+	cout<< "\tjmp FinCase" << TagNumber <<endl;
+	cout<< "FinCASEstate" << TagNumber << " : " <<endl;
+	return type;
+
+}
+
 // ProcedureDeclaration := <NomFonction> ";" BlockStatement
 void ProcedureDeclaration(void){
 	string nom;
@@ -740,6 +689,64 @@ void ProcedureCall(int i){
 	cur=(TOKEN) lexer->yylex();
 }
 
+// AssignementStatement | IfStatement | WhileStatement | ForStatement | BlockStatement | Display | Case | Procedure
+void Statement(void){
+	if(cur==ID){
+		bool assignement=true;
+		for(int i=0;i<ind;i++){
+			if(fon[i]==lexer->YYText()){
+				assignement=false;
+				ProcedureCall(i);
+				break;
+			}
+		}
+		if(assignement==true) AssignementStatement();
+	} 
+	else if(cur==MOTCLEF){
+		if(!strcmp(lexer->YYText(),"WHILE")){
+			WhileStatement();
+		}
+		else if(!strcmp(lexer->YYText(),"IF")){
+			IfStatement();
+		}
+		else if(!strcmp(lexer->YYText(),"FOR")){
+			ForStatement();
+		}
+		else if(!strcmp(lexer->YYText(),"BEGIN")){
+			BlockStatement();
+		}
+		else if(!strcmp(lexer->YYText(),"DISPLAY")){
+			DisplayStatement();
+		}
+		else if(!strcmp(lexer->YYText(),"PROCEDURE")){
+			Error("PROCEDURE doit etre avant le main");
+		}
+	}
+	else Error("ID ou MOTCLEF expected");
+}
+
+// StatementPart := Statement {";" Statement} "."
+void StatementPart(void){
+	cout << "\t.align 8"<<endl;
+	cout << "\t.text\t\t# The following lines contain the program"<<endl;
+	cout << "\t.globl main\t# The main function must be visible from outside"<<endl;
+	cout << "main:\t\t\t# The main function body :"<<endl;
+	cout << "\tmovq %rsp, %rbp\t# Save the position of the stack's top"<<endl;
+	Statement();
+	while(cur==SEMICOLON){
+		cur=(TOKEN) lexer->yylex();
+		Statement();
+	}
+	if(cur!=DOT)
+		Error("caractère '.' expected");
+	cur=(TOKEN) lexer->yylex();
+}
+
+
+
+
+
+
 // Program := [VARDeclarationPart] StatementPart
 void Program(void){
 	if(cur==MOTCLEF && strcmp(lexer->YYText(), "VAR")==0)
@@ -753,7 +760,6 @@ void Program(void){
 
 int main(void){	// First version : Source code on standard input and assembly code on standard output
 	// Header for gcc assembler / linker
-	cout << "\t\t\t# This code was produced by the Mattia La Mura"<<endl;
 	cout << ".data"<<endl;
 	cout << "FormatString1:\t.string \"%llu\"\t# used by printf to display 64-bit unsigned integers"<<endl; 
 	cout << "FormatString2:\t.string \"%lf\"\t# used by printf to display 64-bit floating point numbers"<<endl; 
