@@ -1,11 +1,7 @@
-VAR 	a,b : INTEGER;
-       	cht: CHAR;    
-       	tdbl: DOUBLE.
+VAR a,b : INTEGER;
+       c: BOOLEAN.
 a:=1;
 b:=6;
-
-cht:='a';
-
 WHILE a<12 DO
 BEGIN
 	IF a%2==0 THEN 
@@ -13,6 +9,7 @@ BEGIN
 	ELSE
 		DISPLAY a*2;
 	a:=a+1;
+<<<<<<< HEAD
 	DISPLAY a;
 END;
 
@@ -25,3 +22,8 @@ BEGIN
 	DISPLAY tdbl;
 	DISPLAY '\n';
 END.
+=======
+	c:=(a<=b);
+	DISPLAY c
+END.
+>>>>>>> parent of d651349... Version final

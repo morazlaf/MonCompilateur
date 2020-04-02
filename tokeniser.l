@@ -19,12 +19,16 @@ using namespace std;
 %option c++
 %option yylineno
 
+<<<<<<< HEAD
 charconst \'\\?.\'
+=======
+stringconst  \"[^\n"]+\"
+>>>>>>> parent of d651349... Version final
 ws      [ \t\n\r]+
 alpha   [A-Za-z]
 digit   [0-9]
-number  {digit}+(\.{digit}+)?
-motclef (DISPLAY|IF|THEN|ELSE|BEGIN|END|FOR|TO|DOWNTO|WHILE|DO|VAR|INTEGER|BOOLEAN|CHAR|DOUBLE)
+number  {digit}+
+MOTCLEF (DISPLAY|IF|THEN|ELSE|BEGIN|END|FOR|TO|DOWNTO|WHILE|DO|VAR|INTEGER|BOOLEAN)
 id  {alpha}({alpha}|{digit})*
 addop (\+|\-|\|\|)
 mulop (\*|\/|%|\&\&)
@@ -37,9 +41,15 @@ unknown [^\"A-Za-z0-9 \n\r\t\(\)\<\>\=\!\%\&\|\}\-\;\.]+
 {mulop}   return MULOP;
 {relop}   return RELOP;
 {number}  return NUMBER;
+<<<<<<< HEAD
 {motclef} return MOTCLEF;
 {id}    return ID;
 {charconst} return CHARCONST;
+=======
+{MOTCLEF} return MOTCLEF;
+{id}    return ID;
+{stringconst} return STRINGCONST;
+>>>>>>> parent of d651349... Version final
 "["   return RBRACKET;
 "]"   return LBRACKET;
 ","   return COMMA;
