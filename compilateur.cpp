@@ -81,10 +81,13 @@ void Error(string s){
 // ForStatement := "FOR" AssignementStatement "To" Expression "DO" Statement
 // BlockStatement := "BEGIN" Statement { ";" Statement } "END"
 <<<<<<< HEAD
+<<<<<<< HEAD
 string *fon = new string[15000];
 int ind=0;
 
 =======
+=======
+>>>>>>> parent of d651349... Version final
 		
 // OLD VERSION
 // void Identifier(void){
@@ -117,6 +120,9 @@ int ind=0;
 // 				else
 // 					Error("'(' ou chiffre ou lettre attendue");
 // }
+<<<<<<< HEAD
+>>>>>>> parent of d651349... Version final
+=======
 >>>>>>> parent of d651349... Version final
 enum TYPES Expression(void);			// Called by Term() and calls Term()
 void Statement(void);
@@ -137,9 +143,12 @@ enum TYPES Number(void){
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 // PLUS RIEN QUI MARCHE JE VAIS VRILLER
+=======
+>>>>>>> parent of d651349... Version final
 =======
 >>>>>>> parent of d651349... Version final
 enum TYPES Factor(void){
@@ -274,6 +283,7 @@ enum TYPES Term(void){
 				if(type2!=INTEGER)
 					Error("le type doit être INTEGER dans l'expression");
 <<<<<<< HEAD
+<<<<<<< HEAD
 				if(t2==INTEGER){
 					cout << "\tpop %rbx"<<endl;	// get first operand
 					cout << "\tpop %rax"<<endl;	// get second operand
@@ -287,6 +297,10 @@ enum TYPES Term(void){
 					cout<<"\tfstpl 8(%rsp)"<<endl;
 					cout<<"\taddq	$8, %rsp\t# result on stack's top"<<endl; 
 				}
+=======
+				cout << "\tmulq	%rbx"<<endl;	// a * b -> %rdx:%rax
+				cout << "\tpush %rax\t# MUL"<<endl;	// store result
+>>>>>>> parent of d651349... Version final
 =======
 				cout << "\tmulq	%rbx"<<endl;	// a * b -> %rdx:%rax
 				cout << "\tpush %rax\t# MUL"<<endl;	// store result
@@ -349,7 +363,11 @@ enum TYPES Term(void){
 // 	}
 // }
 
+<<<<<<< HEAD
 // AdditiveOperator := "+" | "-" | "||"
+=======
+// AdditiveOperator := "+" | "-" | "||"
+>>>>>>> parent of d651349... Version final
 OPADD AdditiveOperator(void){
 	OPADD opadd;
 	if(strcmp(lexer->YYText(),"+")==0)
@@ -401,8 +419,11 @@ enum TYPES SimpleExpression(void){
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // RelationalOperator := "==" | "!=" | "<" | ">" | "<=" | ">="  
 =======
+=======
+>>>>>>> parent of d651349... Version final
 // OLD VERSION
 // // SimpleExpression := Term {AdditiveOperator Term}
 // void SimpleExpression(void){
@@ -560,6 +581,45 @@ enum TYPES Expression(void){
 void Statement(void);
 
 
+// OLD VERSION
+// // Expression := SimpleExpression [RelationalOperator SimpleExpression]
+// void Expression(void){
+// 	OPREL oprel;
+// 	SimpleExpression();
+// 	if(cur==RELOP){
+// 		oprel=RelationalOperator();
+// 		SimpleExpression();
+// 		cout << "\tpop %rax"<<endl;
+// 		cout << "\tpop %rbx"<<endl;
+// 		cout << "\tcmpq %rax, %rbx"<<endl;
+// 		switch(oprel){
+// 			case EQU:
+// 				cout << "\tje Vrai"<<++TagNumber<<"\t# If equal"<<endl;
+// 				break;
+// 			case DIFF:
+// 				cout << "\tjne Vrai"<<++TagNumber<<"\t# If different"<<endl;
+// 				break;
+// 			case SUPE:
+// 				cout << "\tjae Vrai"<<++TagNumber<<"\t# If above ou equal"<<endl;
+// 				break;
+// 			case INFE:
+// 				cout << "\tjbe Vrai"<<++TagNumber<<"\t# If below ou equal"<<endl;
+// 				break;
+// 			case INF:
+// 				cout << "\tjb Vrai"<<++TagNumber<<"\t# If below"<<endl;
+// 				break;
+// 			case SUP:
+// 				cout << "\tja Vrai"<<++TagNumber<<"\t# If above"<<endl;
+// 				break;
+// 			default:
+// 				Error("Opérateur de comparaison inconnu");
+// 		}
+// 		cout << "\tpush $0\t\t# False"<<endl;
+// 		cout << "\tjmp Suite"<<TagNumber<<endl;
+// 		cout << "Vrai"<<TagNumber<<":\tpush $0xFFFFFFFFFFFFFFFF\t\t# True"<<endl;	
+// 		cout << "Suite"<<TagNumber<<":"<<endl;
+// 	}
+// }
 
 <<<<<<< HEAD
 =======
@@ -620,6 +680,7 @@ void AssignementStatement(void){
 		Error("caractères ':=' expecteds");
 	cur=(TOKEN) lexer->yylex();
 <<<<<<< HEAD
+<<<<<<< HEAD
 	stype = Expression();
 	if(ftype!=stype) Error("Les operandes ne sont pas du meme type");
 	if(ftype==CHAR){
@@ -632,6 +693,15 @@ void AssignementStatement(void){
 	typ[cptt]=ftype;
 	cptt++;
 
+=======
+	type2=Expression();
+	if(type2!=type1){
+		cerr<<"Type variable "<<type1<<endl;
+		cerr<<"Type Expression "<<type2<<endl;
+		Error("types incompatibles dans l'affectation");
+	}
+	cout << "\tpop "<<variable<<endl;
+>>>>>>> parent of d651349... Version final
 }
 
 // BlockStatement
@@ -650,6 +720,7 @@ void BlockStatement(void){
 	else Error("BEGIN expected");
 }
 
+<<<<<<< HEAD
 
 // ForStatement
 void ForStatement(void){
@@ -753,6 +824,8 @@ void WhileStatement(void){
 }
 
 
+=======
+>>>>>>> parent of d651349... Version final
 // // AssignementStatement := Identifier ":=" Expression
 // void AssignementStatement(void){
 // 	string variable;
@@ -770,6 +843,9 @@ void WhileStatement(void){
 // 	Expression();
 // 	cout << "\tpop "<<variable<<endl;
 // }
+<<<<<<< HEAD
+>>>>>>> parent of d651349... Version final
+=======
 >>>>>>> parent of d651349... Version final
 
 // DisplayStatement := "DISPLAY" Expression
@@ -793,6 +869,7 @@ void DisplayStatement(void){
 			cout << "Next"<<tag<<":"<<endl;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	else if(type==DOUBLE){
 		cout << "\tmovsd	(%rsp), %xmm0\t\t# &stack top -> %xmm0"<<endl;
 		cout << "\tsubq	$16, %rsp\t\t# allocation for 3 additional doubles"<<endl;
@@ -812,6 +889,8 @@ void DisplayStatement(void){
 	else
 		Error("DISPLAY ne fonctionne que pour les nombres entiers");
 =======
+=======
+>>>>>>> parent of d651349... Version final
 		else
 			Error("DISPLAY ne fonctionne que pour les nombres entiers");
 >>>>>>> parent of d651349... Version final
@@ -821,6 +900,7 @@ void DisplayStatement(void){
 }
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 //<case label list> ::= <constant> {, <constant> }
 TYPES CaseLabelList(){
@@ -870,6 +950,8 @@ void ProcedureDeclaration(void){
 	BlockStatement();
 	cout<<"\tret"<<endl;
 =======
+=======
+>>>>>>> parent of d651349... Version final
 // Statement := AssignementStatement
 void Statement(void){
 	if(cur==MOTCLEF)
@@ -920,6 +1002,9 @@ void IfStatement(void){
 		Statement();
 	}
 	cout<<"Next"<<tag<<":"<<endl;
+<<<<<<< HEAD
+>>>>>>> parent of d651349... Version final
+=======
 >>>>>>> parent of d651349... Version final
 }
 
@@ -995,6 +1080,9 @@ void BlockStatement(void){
 	if(cur!=MOTCLEF||strcmp(lexer->YYText(), "END")!=0)
 		Error("mot-clé END attendu");
 	cur=(TOKEN) lexer->yylex();
+<<<<<<< HEAD
+>>>>>>> parent of d651349... Version final
+=======
 >>>>>>> parent of d651349... Version final
 }
 
@@ -1016,11 +1104,14 @@ void StatementPart(void){
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 
 
 
+=======
+>>>>>>> parent of d651349... Version final
 =======
 >>>>>>> parent of d651349... Version final
 // Program := [VARDeclarationPart] StatementPart
@@ -1033,6 +1124,10 @@ void Program(void){
 int main(void){	// First version : Source code on standard input and assembly code on standard output
 	// Header for gcc assembler / linker
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	cout << "\t\t\t# This code was produced by the CERI Compiler"<<endl;
+>>>>>>> parent of d651349... Version final
 =======
 	cout << "\t\t\t# This code was produced by the CERI Compiler"<<endl;
 >>>>>>> parent of d651349... Version final

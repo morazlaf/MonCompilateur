@@ -10,6 +10,7 @@ BEGIN
 		DISPLAY a*2;
 	a:=a+1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	DISPLAY a;
 END;
 
@@ -22,6 +23,11 @@ BEGIN
 	DISPLAY tdbl;
 	DISPLAY '\n';
 END.
+=======
+	c:=(a<=b);
+	DISPLAY c
+END.
+>>>>>>> parent of d651349... Version final
 =======
 	c:=(a<=b);
 	DISPLAY c

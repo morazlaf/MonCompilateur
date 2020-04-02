@@ -20,7 +20,11 @@ using namespace std;
 %option yylineno
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 charconst \'\\?.\'
+=======
+stringconst  \"[^\n"]+\"
+>>>>>>> parent of d651349... Version final
 =======
 stringconst  \"[^\n"]+\"
 >>>>>>> parent of d651349... Version final
@@ -42,9 +46,15 @@ unknown [^\"A-Za-z0-9 \n\r\t\(\)\<\>\=\!\%\&\|\}\-\;\.]+
 {relop}   return RELOP;
 {number}  return NUMBER;
 <<<<<<< HEAD
+<<<<<<< HEAD
 {motclef} return MOTCLEF;
 {id}    return ID;
 {charconst} return CHARCONST;
+=======
+{MOTCLEF} return MOTCLEF;
+{id}    return ID;
+{stringconst} return STRINGCONST;
+>>>>>>> parent of d651349... Version final
 =======
 {MOTCLEF} return MOTCLEF;
 {id}    return ID;
