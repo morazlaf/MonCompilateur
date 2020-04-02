@@ -11,7 +11,4 @@ compilateur:	compilateur.cpp tokeniser.o
 test.s:		compilateur test.p
 		./compilateur <test.p >test.s
 test:		test.s
-		gcc -ggdb -no-pie -fno-pie test.s -o test
-
-
-
+		gcc -ggdb -fno-pie -no-pie test.s -o test

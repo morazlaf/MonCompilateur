@@ -19,15 +19,16 @@ using namespace std;
 %option c++
 %option yylineno
 
-stringconst  \"[^\n"]+\"
+
 ws      [ \t\n\r]+
 alpha   [A-Za-z]
 digit   [0-9]
-number  {digit}+
-MOTCLEF (DISPLAY|IF|THEN|ELSE|BEGIN|END|FOR|TO|DOWNTO|WHILE|DO|VAR|INTEGER|BOOLEAN)
+number  {digit}+(\.{digit}+)?
+motclef (DISPLAY|IF|THEN|ELSE|BEGIN|END|FOR|TO|DOWNTO|WHILE|DO|VAR|INTEGER|BOOLEAN|CHAR|DOUBLE)
 id  {alpha}({alpha}|{digit})*
 addop (\+|\-|\|\|)
 mulop (\*|\/|%|\&\&)
+charconst \'\\?.\'
 relop (\<|\>|"=="|\<=|\>=|!=)
 unknown [^\"A-Za-z0-9 \n\r\t\(\)\<\>\=\!\%\&\|\}\-\;\.]+
 
@@ -37,9 +38,9 @@ unknown [^\"A-Za-z0-9 \n\r\t\(\)\<\>\=\!\%\&\|\}\-\;\.]+
 {mulop}   return MULOP;
 {relop}   return RELOP;
 {number}  return NUMBER;
-{MOTCLEF} return MOTCLEF;
 {id}    return ID;
-{stringconst} return STRINGCONST;
+{motclef} return MOTCLEF;
+{charconst} return CHARCONST;
 "["   return RBRACKET;
 "]"   return LBRACKET;
 ","   return COMMA;
